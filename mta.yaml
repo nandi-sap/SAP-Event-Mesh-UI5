@@ -1,0 +1,82 @@
+_schema-version: "3.2"
+ID: ui5
+version: 0.0.1
+modules:
+- name: ui5-approuter
+  type: approuter.nodejs
+  path: ui5-approuter
+  requires:
+  - name: ui5_html_repo_runtime
+  - name: uaa_ui5
+  - name: ui5-dest-srv
+    group: destinations
+    properties:
+      forwardAuthToken: false
+      name: ui5
+      url: https://ui5.sap.com
+  parameters:
+    disk-quota: 256M
+    memory: 256M
+- name: ui5-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: ui5-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - ui5app.zip
+      name: ui5app
+      target-path: resources/
+- name: ui5app
+  type: html5
+  path: ui5app
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: ui5_html_repo_runtime
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-runtime
+- name: uaa_ui5
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: ui5-xsuaa-service
+    service-plan: application
+- name: ui5-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: ui5-html5-srv
+    service-plan: app-host
+- name: ui5-dest-srv
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: false
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: ui5-dest-srv
+    service-plan: lite
+parameters:
+  deploy_mode: html5-repo

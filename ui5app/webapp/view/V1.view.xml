@@ -1,0 +1,92 @@
+<mvc:View
+    controllerName="ui5app.controller.V1"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+>
+    <Shell id="shell">
+        <App id="app">
+            <pages>
+                <Page id="page" title="{i18n>title}">
+                    <content>
+                        <Table id="idTab"
+                        inset="false"
+                        items="{HANAMODEL>/hana}">
+                        <headerToolbar>
+                            <OverflowToolbar>
+                                <content>
+                                  <Title text="Refresh Data" level="H2"/>
+                                  
+                                  <Button text="Refresh" press="onPress" type="Accept" />
+                                </content>
+                            </OverflowToolbar>
+                        </headerToolbar>
+                            	<columns>
+                                    <Column
+                                        width="12em">
+                                        <Text text="ID" />
+                                    </Column>
+                                    <Column
+                                        width="12em">
+                                        <Text text="DATA" />
+                                    </Column>
+                                    <Column
+                                        width="12em">
+                                        <Text text="Comments" />
+                                    </Column>                                                                        
+                                </columns>
+                                <items>
+                                   <ColumnListItem vAlign="Middle">
+                                      <cells>
+                                         <Text text="{HANAMODEL>ID}" />
+                                      </cells>
+                                      <cells>
+                                         <Text text="{HANAMODEL>DATA}" />
+                                      </cells>
+                                      <cells>
+                                         <Text text="{HANAMODEL>Comments}" />
+                                      </cells>                                                                            
+                                   </ColumnListItem>
+                                </items>
+                        </Table>
+	                    <VBox>
+                            <Panel headerText="Push To Event Mesh">
+                            <l:VerticalLayout class="sapUiContentPadding" width="100%">
+                                
+                                        <Label text="ID" />
+                                        <Input id ="ID"
+                                                                               
+                                        width="250px"
+                                        fieldWidth="80%"
+                                        showClearIcon="true"
+                                        class="sapUiSmallMarginBottom" />
+                                        
+                                        <Label text="DATA" />
+                                        <Input id = "DATA"
+                                                                                
+                                        width="250px"
+                                        fieldWidth="80%"
+                                        showClearIcon="true"
+                                        class="sapUiSmallMarginBottom" />
+                                        
+                                        <Label text="Comments" />
+                                        <Input id ="Comments"
+                                                                              
+                                        width="250px"
+                                        fieldWidth="80%"
+                                        showClearIcon="true"
+                                        class="sapUiSmallMarginBottom" />         
+
+                                        <Button text="Push To Event Queue" press="onPush" />                             
+                                
+                                </l:VerticalLayout>
+                            </Panel>
+                            
+                        </VBox>
+                    </content>
+                </Page>
+            </pages>
+        </App>
+    </Shell>
+</mvc:View>
